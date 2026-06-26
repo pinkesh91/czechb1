@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Czech B1 Master</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;background:#111;color:#fff;max-width:700px;margin:auto;padding:20px}
+.card{background:#222;border-radius:16px;padding:30px;text-align:center;min-height:220px;cursor:pointer}
+button,input{padding:10px;border-radius:8px;margin:5px;font-size:16px}
+.small{color:#bbb}
+</style>
+</head>
+<body>
+<h2>🇨🇿 Czech B1 Master (Preview)</h2>
+<input id="search" placeholder="Search..." oninput="searchCards()">
+<div style="margin:10px 0">
+<button onclick="prev()">◀</button>
+<button onclick="next()">▶</button>
+<button onclick="shuffle()">🔀</button>
+</div>
+<div class="card" onclick="flip()">
+<h1 id="cz"></h1>
+<div id="answer" style="display:none">
+<h2 id="en"></h2>
+<p id="czs"></p>
+<p class="small" id="ens"></p>
+</div>
+</div>
+<p id="info"></p>
+<script>
+const words=[{"cz": "obchod", "en": "shop / store", "topic": "Shopping", "sentence_cz": "Nakupuji v obchodě každý pátek.", "sentence_en": "I shop at the store every Friday."}, {"cz": "práce", "en": "work", "topic": "Work", "sentence_cz": "Pracuji v Praze.", "sentence_en": "I work in Prague."}, {"cz": "rodina", "en": "family", "topic": "Family", "sentence_cz": "Moje rodina je velká.", "sentence_en": "My family is big."}, {"cz": "lékař", "en": "doctor", "topic": "Health", "sentence_cz": "Musím jít k lékaři.", "sentence_en": "I have to go to the doctor."}, {"cz": "cestovat", "en": "to travel", "topic": "Travel", "sentence_cz": "Rád cestuji vlakem.", "sentence_en": "I like travelling by train."}];
+let deck=[...words],i=0,show=false;
+function render(){
+ if(deck.length===0){cz.textContent="No results";answer.style.display="none";info.textContent="";return;}
+ const w=deck[i];
+ cz.textContent=w.cz;
+ en.textContent=w.en;
+ czs.textContent=w.sentence_cz;
+ ens.textContent=w.sentence_en;
+ answer.style.display=show?"block":"none";
+ info.textContent=`${i+1} / ${deck.length} • ${w.topic}`;
+}
+function flip(){show=!show;render();}
+function next(){i=(i+1)%deck.length;show=false;render();}
+function prev(){i=(i-1+deck.length)%deck.length;show=false;render();}
+function shuffle(){deck.sort(()=>Math.random()-0.5);i=0;show=false;render();}
+function searchCards(){
+ const q=document.getElementById('search').value.toLowerCase();
+ deck=words.filter(w=>w.cz.toLowerCase().includes(q)||w.en.toLowerCase().includes(q));
+ i=0;show=false;render();
+}
+render();
+</script>
+</body>
+</html>
